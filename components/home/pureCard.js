@@ -7,7 +7,7 @@ export const PureCard = () => {
       <h3>FIRST BLOG TITL…</h3>
       <small>By FikraSpace</small>
       <div className="blog-card-footer">
-        <a>Reade article</a>
+        <a>Read article</a>
         <span>June 19, 2020</span>
       </div>
     </div>

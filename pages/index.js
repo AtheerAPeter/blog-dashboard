@@ -1,11 +1,10 @@
-import { PureHeader } from "../components/main";
+import { PureHeader, AuthContainer } from "../components/main";
 import { PureCard } from "../components/home";
 import { Input, Button, Row, Col } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-
 const Home = () => {
   return (
-    <>
+    <AuthContainer>
       <PureHeader />
       <main>
         <div className="container">
@@ -38,7 +37,7 @@ const Home = () => {
           </Row>
         </div>
       </main>
-    </>
+    </AuthContainer>
   );
 };
 
