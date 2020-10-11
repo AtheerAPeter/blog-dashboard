@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { PureHeader } from "../../components/main";
-import { Input, Button, Card, message, Popover } from "antd";
+import { Input, Button, Card, message, Popover, Col, Row } from "antd";
 import { AuthContainer } from "../../components/main";
-import { addData, editData, getOne } from "../../api";
+import { addData, editData, getOne, deleteOne } from "../../api";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const Create = () => {
   const [text, setText] = useState("");
@@ -14,8 +15,9 @@ const Create = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const router = useRouter("");
+
   useEffect(() => {
-    if (router && router.query) {
+    if (router.query) {
       if (router.query.id == "create") return;
       else {
         setIsEdit(true);
@@ -90,6 +92,20 @@ const Create = () => {
     );
   };
 
+  const handleDelete = () => {
+    deleteOne(router.query.id, (err, result) => {
+      if (err) throw err;
+      if (!result.status) {
+        Object.keys(result.errMsg).forEach((key) =>
+          message.error(result.errMsg[key])
+        );
+      } else {
+        message.success("Deleted");
+        router.push("/");
+      }
+    });
+  };
+
   return (
     <AuthContainer>
       <div className="create-page">
@@ -97,22 +113,48 @@ const Create = () => {
         <main>
           <div className="container">
             <div className="search-box">
-              <Popover content={<img src={image && image} />}>
-                <Input
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  style={{ width: 300 }}
-                  placeholder="https://example/image.png"
-                />
-              </Popover>
-              <Button
-                loading={loading}
-                onClick={isEdit ? handleEdit : handleNew}
-                disabled={image && text && description && title ? false : true}
-                type="primary"
+              <Row
+                gutter={[20]}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
               >
-                Save
-              </Button>
+                <Col span={10}>
+                  <Popover content={<img src={image && image} />}>
+                    <Input
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
+                      style={{ width: 300 }}
+                      placeholder="https://example/image.png"
+                    />
+                  </Popover>
+                </Col>
+                <Col span={9}>
+                  <Button
+                    style={{ width: "100%", margin: "0" }}
+                    loading={loading}
+                    onClick={isEdit ? handleEdit : handleNew}
+                    disabled={
+                      image && text && description && title ? false : true
+                    }
+                    type="primary"
+                  >
+                    Save
+                  </Button>
+                </Col>
+                <Col span={3}>
+                  <Button
+                    onClick={handleDelete}
+                    style={{ width: "100%" }}
+                    type="primary"
+                    icon={<DeleteOutlined />}
+                    danger
+                    disabled={router.query.id != "create" ? false : true}
+                  ></Button>
+                </Col>
+              </Row>
             </div>
             <Input.TextArea
               value={description}

@@ -55,7 +55,22 @@ export const editData = (id, data, callback) => {
 };
 
 export const getOne = (id, callback) => {
-  fetch(`${URL}article/${id}`)
+  fetch(`${URL}article/${id}`, {
+    method: "GET",
+  })
+    // using callback to either send data or error
+    .then((res) => res.json())
+    .then((restult) => callback(null, restult))
+    .catch((err) => callback(err, null));
+};
+
+export const deleteOne = (id, callback) => {
+  fetch(`${URL}article/${id}`, {
+    method: "DELETE",
+    headers: {
+      token: localStorage.getItem("blog_token"),
+    },
+  })
     // using callback to either send data or error
     .then((res) => res.json())
     .then((restult) => callback(null, restult))
