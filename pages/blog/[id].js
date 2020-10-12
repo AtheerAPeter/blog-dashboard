@@ -19,7 +19,9 @@ const Create = () => {
 
   useEffect(() => {
     if (router.query) {
-      if (router.query.id == "create") return;
+      if (router.query.id == "create"){
+        setSpin(false)
+      }
       else {
         setIsEdit(true);
         getOne(router.query.id, (err, result) => {
