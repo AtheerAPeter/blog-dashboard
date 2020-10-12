@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { PureHeader } from "../../components/main";
-import { Input, Button, Card, message, Popover, Col, Row } from "antd";
+import { Input, Button, Card, message, Popover, Col, Row, Spin } from "antd";
 import { AuthContainer } from "../../components/main";
 import { addData, editData, getOne, deleteOne } from "../../api";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -13,6 +13,7 @@ const Create = () => {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [spin, setSpin] = useState(true)
 
   const router = useRouter("");
 
@@ -28,6 +29,7 @@ const Create = () => {
               message.error(result.errMsg[key])
             );
           } else {
+            setSpin(false)
             setText(result.article.text);
             setTitle(result.article.title);
             setDescription(result.article.description);
@@ -108,6 +110,8 @@ const Create = () => {
 
   return (
     <AuthContainer>
+            <Spin tip="Loading..." spinning={spin} size="large">
+
       <div className="create-page">
         <PureHeader />
         <main>
@@ -184,6 +188,7 @@ const Create = () => {
           </div>
         </main>
       </div>
+      </Spin>
     </AuthContainer>
   );
 };
